@@ -39,6 +39,8 @@ export default function Footer() {
                         <Link href={"/game/sudoku"}>Sudoku</Link> 
                         {/* The link above in local instead it should be relative  */}
                         <Link href={"https://ajaynegi.web.app/contact/"}>Contact us</Link>
+                        <Link href={"/contact"}>Contact Page</Link>
+
                     </div>
                     <div className={styles["footer-right-link-container"]} >
                         <p>Contribution</p>
