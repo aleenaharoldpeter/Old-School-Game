@@ -123,43 +123,45 @@ export default async function ContributorsPage() {
                 <div className={styles.Guidelines}>
                     <h2>Want to Contribute?</h2>
                     <p className={styles.contributeText}>
-                        <br />  We welcome meaningful contributions from developers, educators,
-                        and cognitive science enthusiasts!<br />
+                        <br />  We welcome contributions from developers, educators, designers, 
+                        and anyone passionate about how the mind works.<br />
 
-                        <br /> <b>The contribution is not limited to a game,  it’s anything that helps in brain
-                            development.</b> <br />
-                        Your open-source project might have started as a game, but its core purpose is not just entertainment,
-                        it’s about nurturing mental agility, problem-solving, and creative thinking through technology.<br />
+                        <br /> This project may have started out as a game, but it’s grown into
+                             something more meaningful. At its heart, it’s not just about 
+                             playing, it’s about building things that keep the brain active, 
+                             curious, and creative.<br />
 
-                        <br />Think of it like this: <br />
-                        The <b>game </b> is simply the medium — the bigger goal is to create experiences and tools
-                        that strengthen the human mind. This opens the door for many types of contributions beyond
-                        just writing game logic.<br />
+                        <br />Think of the game as a doorway. What lies beyond it is the 
+                        bigger mission: creating experiences and tools that actually strengthen 
+                        the mind. That means there’s room here for a lot more than just game
+                         mechanics.<br />
 
-                        <br />  Why it’s bigger than just a game: <br />
+                        <br /> Why this is bigger than <b>just a game</b> <br />
 
 
-                        <b>Brain health matters as much as physical health</b> <br />
-                        Just like exercise builds muscles, certain mental challenges stimulate brain regions
-                        that improve memory, focus, reasoning, and creativity.<br />
+                        <b>Brain health matters. </b> 
+                         Just like regular exercise keeps the body strong, certain kinds of challenges
+                          puzzles, strategy, creative problem-solving, keep the brain 
+                         sharp and flexible.<br />
 
-                        <br /> Interdisciplinary collaboration <br />
-                        A project focused on brain development benefits from:<br />
+                        <br /> <b>It takes many minds to build for the mind.</b> <br />
+                      
 
-                        • Developers to build interactive tools<br />
+                        • Developers can bring interactive ideas to life.<br />
 
-                        • Educators to design content<br />
+                        • Educators can shape challenges into meaningful learning.<br />
 
-                        • Designers to create intuitive, stimulating interfaces<br />
+                        • Designers can make everything intuitive and engaging.<br />
 
-                        • Cognitive scientists to guide brain-boosting mechanics<br />
+                        • Cognitive scientists can guide us on what really helps memory, focus, and reasoning.<br />
 
-                        • Writers to craft engaging scenarios that challenge creativity<br />
+                        • Writers and storytellers can create scenarios that spark imagination.<br />
 
                         <br />
-                        We are building an open, evolving <b>Brain Gym</b> — a digital space where games,
-                        challenges, and creative tools work together to make people smarter, sharper, and
-                        more imaginative.
+                       We like to think of this project as a kind of digital <b>Brain Gym</b>.
+                        A place where games, challenges, and creative tools come together
+                         to make people just a little bit sharper, more focused, and more
+                          inventive every time they engage..
                     </p>
                     <p className={styles.contributeText1}>
                         Check out our{" "}
