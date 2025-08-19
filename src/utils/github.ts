@@ -19,7 +19,7 @@ export async function fetchGitHub<T>(endpoint: string): Promise<T> {
         return await res.json() as T;
     } catch (error) {
         console.error('GitHub Fetch Failed:', error);
-        // 👇 return correct type (fallback empty array only if T is an array)
+        //  return correct type (fallback empty array only if T is an array)
         return [] as unknown as T;
     }
 }
