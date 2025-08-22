@@ -1,0 +1,249 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #ffffff; /* light paper-like background */
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+}
+
+/* Header Section */
+.heading {
+  margin-bottom: 2.3rem;
+}
+
+.heading h1 {
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.heading p {
+  color: #555;
+  font-size: 1.5rem;
+}
+
+/* Section Title */
+.section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+/* Contributors & Commit Grid */
+.grid {
+  display: flex;
+  justify-content: center;
+    flex-wrap: wrap;
+  gap: 2rem;
+  justify-items: center;
+    margin-bottom: 5rem;
+}
+
+/* Contributor Cards */
+.card {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.avatar {
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+}
+
+/* Contributor Name */
+.username {
+  font-weight: bold;
+  color: #000;
+}
+
+
+@media (max-width: 400px) {
+  .container {
+    background: #ffffff; 
+  
+  }
+
+.heading p {
+  color: #555;
+  font-size: 1rem;
+}
+.section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.3rem;
+  font-weight: bold;
+}
+.section{
+  background-color:#ffffff ;
+}
+
+  
+
+
+  .card {
+    width: 90%;
+    margin: auto;
+    padding: 1rem;
+  }
+
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .username {
+    font-size: 1rem;
+  }
+.heading h1 {
+  font-size: 1.7rem;
+ 
+}
+
+  
+  .card {
+    width: 90%;
+    margin: auto;
+  }
+}
+
+/* Commit Cards */
+
+.commitCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  margin-bottom: 2rem;
+  width: 25%;
+}
+
+.commitCard:hover {
+  transform: scale(1.02);
+}
+
+.commitCardDetails {
+  text-align: left;
+  margin-left: 1rem;
+  max-width: 70%;
+  overflow: hidden;
+}
+.moreCommits {
+  text-align: center;
+  color: #555;
+  font-size: 4rem;
+  margin-top: .5rem;
+}
+.message {
+  color: #333;
+  font-size: 0.9rem;
+  margin: 0.2rem 0;
+}
+
+.time {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+@media (max-width: 400px) {
+  .commitCard {
+    flex-direction: row;
+    align-items: center;
+    width: 90%;
+    margin-bottom: 0;
+  }
+  .commitCardDetails {
+    text-align: left;
+    margin-left: 2rem;
+
+  }
+}
+
+/* Contributing Section */
+
+
+.Guidelines {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+
+.link {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+.contributeText {
+  font-size: 1.2rem;
+  color: #000000;
+  margin-bottom: 3rem;
+  text-align: left;
+  width: 90%;
+  text-decoration-thickness: .4rem;
+  text-decoration-style: solid;
+  text-decoration-color: #000000;
+  border-left: 2px solid #000000;
+  padding-left: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  line-height: 1.6;
+  background: #f0f0f0;
+  border-radius: 8px;
+  padding: 0.5rem;
+
+
+}
+.contributeText1 {
+  font-size: 1.2rem;
+  color: #111111;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+@media (max-width: 400px) {
+
+  .contributeText {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    
+   
+    text-align: left;
+    font-size: 15px;
+  }
+  .contributeText1 {
+    font-size: 1.2rem;
+    color: #111111;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  .Guidelines {
+    width: 120%;
+    margin-left: -10%;
+    padding: 0;
+    box-shadow: none;
+    background: transparent;
+
+  }
+}
