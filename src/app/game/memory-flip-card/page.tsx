@@ -282,7 +282,11 @@ const MemoryFlipCardGame = () => {
       </div>
 
       {gameCompleted && (
-        <div className={styles.gameCompleted}>
+        // Overlay 
+        <div className={styles.overlay} onClick={()=>setGameCompleted(false)}>
+        <div className={styles.gameCompleted} onClick={(e)=>e.stopPropagation()}>
+          {/* Close button */}
+            <button className={styles.closeButton} onClick={()=>setGameCompleted(false)}>❌</button>
           <div className={styles.completionMessage}>
             <h2>🎉 Congratulations!</h2>
             <p>You completed the {difficulty} level!</p>
@@ -291,7 +295,6 @@ const MemoryFlipCardGame = () => {
               <p><strong>Time:</strong> {formatTime(time)}</p>
               <p><strong>Rating:</strong> {getScoreRating()}</p>
             </div>
-
             <button 
               className={styles.resetButton}
               onClick={initializeGame}
@@ -300,6 +303,7 @@ const MemoryFlipCardGame = () => {
               🔄 Play Again
             </button>
           </div>
+        </div>
         </div>
       )}
 
