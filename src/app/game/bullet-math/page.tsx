@@ -14,6 +14,8 @@ type Equation = {
 }
 
 const OPS: Op[] = ['+', '-', '×', '÷']
+const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
 
 function randint(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -153,6 +155,7 @@ export default function BulletMath() {
         return t - 1
       })
     }, 1000)
+
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current)
@@ -160,6 +163,7 @@ export default function BulletMath() {
       }
     }
   }, [running])
+
 
   const getPointsForDifficulty = (diff: Difficulty) => {
     switch (diff) {
