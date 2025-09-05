@@ -14,8 +14,6 @@ type Equation = {
 }
 
 const OPS: Op[] = ['+', '-', '×', '÷']
-// const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
 
 function randint(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -30,6 +28,10 @@ function compute(a: number, b: number, op: Op): number {
     case '-': return a - b
     case '×': return a * b
     case '÷': return Math.trunc(a / b)
+    default: {
+      const _exhaustive: never = op
+      return _exhaustive
+    }
   }
 }
 
@@ -123,8 +125,10 @@ export default function BulletMath() {
   const [userAnswer, setUserAnswer] = useState('')
   const [isWrong, setIsWrong] = useState(false)
   const [gameOver, setGameOver] = useState(false)
-  const [attemptedThisEquation, setAttemptedThisEquation] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const startRef = useRef<HTMLButtonElement>(null)
+  const resetRef = useRef<HTMLButtonElement>(null)
   const router = useRouter()
 
   const startGame = useCallback(() => {
@@ -136,7 +140,6 @@ export default function BulletMath() {
     setUserAnswer('')
     setIsWrong(false)
     setGameOver(false)
-    setAttemptedThisEquation(false)
   }, [difficulty])
 
   useEffect(() => {
@@ -144,10 +147,7 @@ export default function BulletMath() {
     timerRef.current = setInterval(() => {
       setTimeLeft(t => {
         if (t <= 1) {
-          if (timerRef.current) {
-            clearInterval(timerRef.current)
-            timerRef.current = null
-          }
+          clearInterval(timerRef.current as unknown as number)
           setRunning(false)
           setGameOver(true)
           return 0
@@ -155,15 +155,23 @@ export default function BulletMath() {
         return t - 1
       })
     }, 1000)
-
     return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current)
-        timerRef.current = null
-      }
+      if (timerRef.current) clearInterval(timerRef.current as unknown as number)
     }
   }, [running])
 
+  // Focus management without autoFocus
+  useEffect(() => {
+    if (running && equation) inputRef.current?.focus()
+  }, [running, equation])
+
+  useEffect(() => {
+    if (!running && !gameOver) startRef.current?.focus()
+  }, [running, gameOver])
+
+  useEffect(() => {
+    if (gameOver) resetRef.current?.focus()
+  }, [gameOver])
 
   const getPointsForDifficulty = (diff: Difficulty) => {
     switch (diff) {
@@ -179,18 +187,13 @@ export default function BulletMath() {
     if (!/^-?\d+$/.test(input)) return
 
     const parsed = Number(input)
-
-    if (!attemptedThisEquation) {
-      setAttempted(n => n + 1) // count once per question
-      setAttemptedThisEquation(true)
-    }
+    setAttempted(n => n + 1)
 
     if (parsed === equation.correct) {
       setScore(s => s + getPointsForDifficulty(difficulty))
       setEquation(generateEquation(difficulty))
       setUserAnswer('')
       setIsWrong(false)
-      setAttemptedThisEquation(false) // reset for next question
     } else {
       setIsWrong(true)
     }
@@ -214,7 +217,7 @@ export default function BulletMath() {
         </div>
       </div>
 
-      <div className={styles.statusBar}>
+      <div className={styles.statusBar} aria-live="polite">
         <span>⏳ {timeLeft}s</span>
         <span>⭐ {score}</span>
         <span>📊 {attempted} attempted</span>
@@ -232,19 +235,19 @@ export default function BulletMath() {
               className={`${styles.input} ${isWrong ? styles.wrong : ''}`}
               aria-label="Your answer"
               placeholder="?"
-              autoFocus
+              ref={inputRef}
             />
           </>
         ) : (
           !gameOver && (
-            <button type="button" className={`${styles.btn} ${styles.neutral}`} onClick={startGame}
-            autoFocus>
+            <button type="button" className={`${styles.btn} ${styles.neutral}`} onClick={startGame} ref={startRef}>
               Press Start
             </button>
           )
         )}
       </div>
 
+      {/* Hints for Veteran mode */}
       {difficulty === 'veteran' && running && equation && (
         <div className={styles.hintBox}>
           <h3>💡 Math Hack</h3>
@@ -260,7 +263,7 @@ export default function BulletMath() {
               <p>⭐ Score: {score}</p>
               <p>📊 Questions Attempted: {attempted}</p>
             </div>
-            <button type="button" className={styles.resetButton} onClick={startGame}>
+            <button type="button" className={styles.resetButton} onClick={startGame} ref={resetRef}>
               🔄 Play Again
             </button>
             <button type="button" className={styles.menuButton} onClick={() => router.push('/')}>
