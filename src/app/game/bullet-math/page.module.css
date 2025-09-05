@@ -183,3 +183,5 @@
   font-size: 14px;
   overflow-x: auto;
 }
+
+.btn:focus-visible, .menuButton:focus-visible, .resetButton:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }

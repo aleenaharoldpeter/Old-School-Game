@@ -46,13 +46,7 @@ const SelectGame = () => {
           backgroundColor={'#760172'}
           textColor={'white'}
         />
-        <Card
-          image={BulletMath}
-          name={'Bullet Math'}
-          link={'bullet-math'}
-          backgroundColor={'#F59E0B'}
-          textColor={'white'}
-        />        
+        <Card image={BulletMath} name={'Bullet Math'} link={'bullet-math'} backgroundColor={'#F59E0B'} textColor={'white'} />      
       </div>
     </>
   )

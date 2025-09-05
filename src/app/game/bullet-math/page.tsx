@@ -14,7 +14,7 @@ type Equation = {
 }
 
 const OPS: Op[] = ['+', '-', '×', '÷']
-const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+// const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
 
 function randint(min: number, max: number) {
@@ -232,11 +232,13 @@ export default function BulletMath() {
               className={`${styles.input} ${isWrong ? styles.wrong : ''}`}
               aria-label="Your answer"
               placeholder="?"
+              autoFocus
             />
           </>
         ) : (
           !gameOver && (
-            <button type="button" className={`${styles.btn} ${styles.neutral} ${styles.startBtn}`} onClick={startGame}>
+            <button type="button" className={`${styles.btn} ${styles.neutral}`} onClick={startGame}
+            autoFocus>
               Press Start
             </button>
           )
