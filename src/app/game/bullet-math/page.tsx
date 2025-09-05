@@ -121,7 +121,8 @@ export default function BulletMath() {
   const [userAnswer, setUserAnswer] = useState('')
   const [isWrong, setIsWrong] = useState(false)
   const [gameOver, setGameOver] = useState(false)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const [attemptedThisEquation, setAttemptedThisEquation] = useState(false)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const router = useRouter()
 
   const startGame = useCallback(() => {
@@ -133,6 +134,7 @@ export default function BulletMath() {
     setUserAnswer('')
     setIsWrong(false)
     setGameOver(false)
+    setAttemptedThisEquation(false)
   }, [difficulty])
 
   useEffect(() => {
@@ -140,7 +142,10 @@ export default function BulletMath() {
     timerRef.current = setInterval(() => {
       setTimeLeft(t => {
         if (t <= 1) {
-          clearInterval(timerRef.current as any)
+          if (timerRef.current) {
+            clearInterval(timerRef.current)
+            timerRef.current = null
+          }
           setRunning(false)
           setGameOver(true)
           return 0
@@ -149,7 +154,10 @@ export default function BulletMath() {
       })
     }, 1000)
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current as any)
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+        timerRef.current = null
+      }
     }
   }, [running])
 
@@ -167,16 +175,18 @@ export default function BulletMath() {
     if (!/^-?\d+$/.test(input)) return
 
     const parsed = Number(input)
-    // setAttempted(n => n + 1)
-    if (parsed === equation.correct) {
-      setAttempted(n => n + 1) // only count once per correct Q
-    } 
+
+    if (!attemptedThisEquation) {
+      setAttempted(n => n + 1) // count once per question
+      setAttemptedThisEquation(true)
+    }
 
     if (parsed === equation.correct) {
       setScore(s => s + getPointsForDifficulty(difficulty))
       setEquation(generateEquation(difficulty))
       setUserAnswer('')
       setIsWrong(false)
+      setAttemptedThisEquation(false) // reset for next question
     } else {
       setIsWrong(true)
     }
@@ -216,19 +226,19 @@ export default function BulletMath() {
               onChange={(e) => setUserAnswer(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') onSubmitAnswer() }}
               className={`${styles.input} ${isWrong ? styles.wrong : ''}`}
+              aria-label="Your answer"
               placeholder="?"
             />
           </>
         ) : (
           !gameOver && (
-            <button className={`${styles.btn} ${styles.neutral} ${styles.startBtn}`} onClick={startGame}>
+            <button type="button" className={`${styles.btn} ${styles.neutral} ${styles.startBtn}`} onClick={startGame}>
               Press Start
             </button>
           )
         )}
       </div>
 
-      {/* Hints for Veteran mode */}
       {difficulty === 'veteran' && running && equation && (
         <div className={styles.hintBox}>
           <h3>💡 Math Hack</h3>
@@ -237,26 +247,17 @@ export default function BulletMath() {
       )}
 
       {gameOver && (
-        <div className={styles.overlay}>
+        <div className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="times-up-heading">
           <div className={styles.completionMessage}>
-            <h2>🎉 Time’s Up!</h2>
+            <h2 id="times-up-heading">🎉 Time’s Up!</h2>
             <div className={styles.finalStats}>
               <p>⭐ Score: {score}</p>
               <p>📊 Questions Attempted: {attempted}</p>
             </div>
-            <button
-              className={styles.resetButton}
-              onClick={() => {
-                setScore(0)            // reset score
-                setAttempted(0)        // reset attempts
-                setTimeLeft(0)         // reset timer display
-                setRunning(false)
-                setGameOver(false)     // close popup
-              }}
-            >
+            <button type="button" className={styles.resetButton} onClick={startGame}>
               🔄 Play Again
             </button>
-            <button className={styles.menuButton} onClick={() => router.push('/')}>
+            <button type="button" className={styles.menuButton} onClick={() => router.push('/')}>
               🏠 Back to Homepage
             </button>
           </div>
