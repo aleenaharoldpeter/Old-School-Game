@@ -185,3 +185,18 @@
 }
 
 .btn:focus-visible, .menuButton:focus-visible, .resetButton:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+
+.infoBox {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #f9fafb;
+  text-align: left;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.infoBox h2 {
+  margin-top: 20px;
+  color: #1e40af;
+}

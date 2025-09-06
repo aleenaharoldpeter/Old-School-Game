@@ -125,6 +125,7 @@ export default function BulletMath() {
   const [userAnswer, setUserAnswer] = useState('')
   const [isWrong, setIsWrong] = useState(false)
   const [gameOver, setGameOver] = useState(false)
+  const [attemptedThisEquation, setAttemptedThisEquation] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const startRef = useRef<HTMLButtonElement>(null)
@@ -173,6 +174,14 @@ export default function BulletMath() {
     if (gameOver) resetRef.current?.focus()
   }, [gameOver])
 
+  useEffect(() => {
+    // every time a new equation loads, reset the flag
+    if (equation) {
+      setAttemptedThisEquation(false)
+    }
+  }, [equation])
+
+
   const getPointsForDifficulty = (diff: Difficulty) => {
     switch (diff) {
       case 'amateur': return 1
@@ -183,11 +192,17 @@ export default function BulletMath() {
 
   const onSubmitAnswer = () => {
     if (!equation || !running) return
+
+    // Only count once per new equation
+    if (!attemptedThisEquation) {
+      setAttempted(a => a + 1)
+      setAttemptedThisEquation(true)
+    }
+
     const input = userAnswer.trim()
     if (!/^-?\d+$/.test(input)) return
 
     const parsed = Number(input)
-    setAttempted(n => n + 1)
 
     if (parsed === equation.correct) {
       setScore(s => s + getPointsForDifficulty(difficulty))
@@ -198,6 +213,18 @@ export default function BulletMath() {
       setIsWrong(true)
     }
   }
+
+  const resetGame = () => {
+    setRunning(false)
+    setGameOver(false)
+    setScore(0)
+    setAttempted(0)
+    setUserAnswer('')
+    setEquation(null)
+    setTimeLeft(120)
+    // reset difficulty selection so user can pick again
+    setDifficulty('') 
+  }  
 
   return (
     <div className={styles.container}>
@@ -263,7 +290,7 @@ export default function BulletMath() {
               <p>⭐ Score: {score}</p>
               <p>📊 Questions Attempted: {attempted}</p>
             </div>
-            <button type="button" className={styles.resetButton} onClick={startGame} ref={resetRef}>
+            <button type="button" className={styles.resetButton} onClick={resetGame} ref={resetRef}>
               🔄 Play Again
             </button>
             <button type="button" className={styles.menuButton} onClick={() => router.push('/')}>
@@ -272,6 +299,38 @@ export default function BulletMath() {
           </div>
         </div>
       )}
+    {/* 📜 Game Documentation Section */}
+    <div className={styles.infoBox}>
+      <h2>📖 How to Play</h2>
+      <ul>
+        <li>Select a difficulty (Amateur, Normal, Veteran).</li>
+        <li>Press <b>Start</b> to begin your 2-minute challenge.</li>
+        <li>Solve each math equation by typing the answer and pressing Enter.</li>
+        <li>Each correct answer gives points (1/2/3 depending on difficulty).</li>
+        <li>Game ends when the timer runs out.</li>
+      </ul>
+
+      <h2>⚙️ Algorithm Behind the Game</h2>
+      <p>
+        Equations are generated randomly using a custom function. Division is adjusted to
+        always result in clean integers (via <code>makeDivisible</code>). Veteran mode
+        includes multi-digit multiplications and division tricks.
+      </p>
+
+      <h2>🧠 Brain Benefits</h2>
+      <ul>
+        <li>Improves working memory and mental math agility.</li>
+        <li>Strengthens logical thinking and quick decision-making.</li>
+        <li>Boosts sustained attention under time pressure.</li>
+      </ul>
+
+      <h2>🔬 Scientific Backing</h2>
+      <p>
+        Research shows that regular mental arithmetic can improve working memory and
+        cognitive flexibility. See: <i>“Cognitive Benefits of Mental Calculation” –
+        Smith et al., 2020</i>.
+      </p>
+    </div>      
     </div>
   )
 }
