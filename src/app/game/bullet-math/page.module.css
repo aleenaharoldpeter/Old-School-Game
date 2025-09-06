@@ -33,11 +33,11 @@
   gap: 12px;
 }
 
-.buttons {
+/* .buttons {
   display: flex;
   gap: 16px;
   margin-top: 10px;
-}
+} */
 
 .btn {
   padding: 12px 20px;

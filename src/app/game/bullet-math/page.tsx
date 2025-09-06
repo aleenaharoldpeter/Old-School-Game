@@ -116,7 +116,8 @@ function generateHint(a: number, b: number, op: Op): string {
 }
 
 export default function BulletMath() {
-  const [difficulty, setDifficulty] = useState<Difficulty>('amateur')
+  type Difficulty = 'amateur' | 'normal' | 'veteran'
+  const [difficulty, setDifficulty] = useState<Difficulty | undefined>(undefined)
   const [running, setRunning] = useState(false)
   const [timeLeft, setTimeLeft] = useState(120)
   const [score, setScore] = useState(0)
@@ -193,16 +194,17 @@ export default function BulletMath() {
   const onSubmitAnswer = () => {
     if (!equation || !running) return
 
+    const input = userAnswer.trim()
+    if (!/^-?\d+$/.test(input)) return
+
+    const parsed = Number(input)
+
     // Only count once per new equation
     if (!attemptedThisEquation) {
       setAttempted(a => a + 1)
       setAttemptedThisEquation(true)
     }
 
-    const input = userAnswer.trim()
-    if (!/^-?\d+$/.test(input)) return
-
-    const parsed = Number(input)
 
     if (parsed === equation.correct) {
       setScore(s => s + getPointsForDifficulty(difficulty))
