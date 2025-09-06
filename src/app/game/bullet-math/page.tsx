@@ -225,7 +225,7 @@ export default function BulletMath() {
     setEquation(null)
     setTimeLeft(120)
     // reset difficulty selection so user can pick again
-    setDifficulty('') 
+    // setDifficulty('') 
   }  
 
   return (
