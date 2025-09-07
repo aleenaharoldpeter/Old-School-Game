@@ -117,7 +117,7 @@ function generateHint(a: number, b: number, op: Op): string {
 
 export default function BulletMath() {
   type Difficulty = 'amateur' | 'normal' | 'veteran'
-  const [difficulty, setDifficulty] = useState<Difficulty | undefined>(undefined)
+  const [difficulty, setDifficulty] = useState<Difficulty>("amateur")
   const [running, setRunning] = useState(false)
   const [timeLeft, setTimeLeft] = useState(120)
   const [score, setScore] = useState(0)
@@ -127,7 +127,7 @@ export default function BulletMath() {
   const [isWrong, setIsWrong] = useState(false)
   const [gameOver, setGameOver] = useState(false)
   const [attemptedThisEquation, setAttemptedThisEquation] = useState(false)
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const timerRef = useRef<number | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const startRef = useRef<HTMLButtonElement>(null)
   const resetRef = useRef<HTMLButtonElement>(null)
@@ -146,10 +146,10 @@ export default function BulletMath() {
 
   useEffect(() => {
     if (!running) return
-    timerRef.current = setInterval(() => {
+    timerRef.current = window.setInterval(() => {
       setTimeLeft(t => {
         if (t <= 1) {
-          clearInterval(timerRef.current as unknown as number)
+          if (timerRef.current != null) { window.clearInterval(timerRef.current); timerRef.current = null }
           setRunning(false)
           setGameOver(true)
           return 0
@@ -158,7 +158,7 @@ export default function BulletMath() {
       })
     }, 1000)
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current as unknown as number)
+      if (timerRef.current != null) { window.clearInterval(timerRef.current); timerRef.current = null }
     }
   }, [running])
 
