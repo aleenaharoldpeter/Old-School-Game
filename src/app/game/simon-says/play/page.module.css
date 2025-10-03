@@ -153,7 +153,7 @@
   font-size: 1rem;
   font-weight: bold;
   color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.9);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -313,37 +313,56 @@
 }
 
 @media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+  
   .gameBoard {
-    gap: 12px;
-    max-width: 340px;
+    gap: 8px;
+    max-width: 320px;
+    padding: 10px;
   }
   
   .grid4 {
-    max-width: 280px;
+    max-width: 260px;
   }
   
   .grid7 {
-    max-width: 320px;
+    max-width: 300px;
   }
   
   .grid10 {
-    max-width: 340px;
+    max-width: 320px;
   }
   
   .gameButton {
-    min-height: 80px;
+    min-height: 70px;
     border-radius: 15px;
+    font-size: 0.85rem;
   }
   
   .buttonLabel {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9), 0 1px 2px rgba(0, 0, 0, 1);
   }
   
   .header {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    gap: 8px;
   }
   
   .title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+  
+  .gameStats {
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .stat {
+    padding: 8px 12px;
+    min-width: 70px;
   }
 }

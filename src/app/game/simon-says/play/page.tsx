@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import styles from './page.module.css';
 
 interface GameState {
@@ -27,35 +28,40 @@ interface Button {
 
 const BUTTON_CONFIGS: Record<ButtonCount, Button[]> = {
   4: [
-    { id: 0, color: '#FF4444', tone: 261.63, label: 'Red', keyBinding: '1' },
-    { id: 1, color: '#4444FF', tone: 329.63, label: 'Blue', keyBinding: '2' },
-    { id: 2, color: '#44FF44', tone: 392.00, label: 'Green', keyBinding: '3' },
-    { id: 3, color: '#FFFF44', tone: 523.25, label: 'Yellow', keyBinding: '4' }
+    { id: 0, color: '#DC2626', tone: 261.63, label: 'Red', keyBinding: '1' },
+    { id: 1, color: '#2563EB', tone: 329.63, label: 'Blue', keyBinding: '2' },
+    { id: 2, color: '#16A34A', tone: 392.00, label: 'Green', keyBinding: '3' },
+    { id: 3, color: '#CA8A04', tone: 523.25, label: 'Yellow', keyBinding: '4' }
   ],
   7: [
-    { id: 0, color: '#FF4444', tone: 261.63, label: 'Red', keyBinding: '1' },
-    { id: 1, color: '#4444FF', tone: 329.63, label: 'Blue', keyBinding: '2' },
-    { id: 2, color: '#44FF44', tone: 392.00, label: 'Green', keyBinding: '3' },
-    { id: 3, color: '#FFFF44', tone: 523.25, label: 'Yellow', keyBinding: '4' },
-    { id: 4, color: '#FF8800', tone: 349.23, label: 'Orange', keyBinding: '5' },
-    { id: 5, color: '#8800FF', tone: 440.00, label: 'Purple', keyBinding: '6' },
-    { id: 6, color: '#00FFFF', tone: 493.88, label: 'Cyan', keyBinding: '7' }
+    { id: 0, color: '#DC2626', tone: 261.63, label: 'Red', keyBinding: '1' },
+    { id: 1, color: '#2563EB', tone: 329.63, label: 'Blue', keyBinding: '2' },
+    { id: 2, color: '#16A34A', tone: 392.00, label: 'Green', keyBinding: '3' },
+    { id: 3, color: '#CA8A04', tone: 523.25, label: 'Yellow', keyBinding: '4' },
+    { id: 4, color: '#EA580C', tone: 349.23, label: 'Orange', keyBinding: '5' },
+    { id: 5, color: '#7C3AED', tone: 440.00, label: 'Purple', keyBinding: '6' },
+    { id: 6, color: '#0891B2', tone: 493.88, label: 'Cyan', keyBinding: '7' }
   ],
   10: [
-    { id: 0, color: '#FF4444', tone: 261.63, label: 'Red', keyBinding: '1' },
-    { id: 1, color: '#4444FF', tone: 329.63, label: 'Blue', keyBinding: '2' },
-    { id: 2, color: '#44FF44', tone: 392.00, label: 'Green', keyBinding: '3' },
-    { id: 3, color: '#FFFF44', tone: 523.25, label: 'Yellow', keyBinding: '4' },
-    { id: 4, color: '#FF8800', tone: 349.23, label: 'Orange', keyBinding: '5' },
-    { id: 5, color: '#8800FF', tone: 440.00, label: 'Purple', keyBinding: '6' },
-    { id: 6, color: '#00FFFF', tone: 493.88, label: 'Cyan', keyBinding: '7' },
-    { id: 7, color: '#FF00FF', tone: 587.33, label: 'Magenta', keyBinding: '8' },
-    { id: 8, color: '#888888', tone: 659.25, label: 'Gray', keyBinding: '9' },
-    { id: 9, color: '#8B4513', tone: 698.46, label: 'Brown', keyBinding: '0' }
+    { id: 0, color: '#DC2626', tone: 261.63, label: 'Red', keyBinding: '1' },
+    { id: 1, color: '#2563EB', tone: 329.63, label: 'Blue', keyBinding: '2' },
+    { id: 2, color: '#16A34A', tone: 392.00, label: 'Green', keyBinding: '3' },
+    { id: 3, color: '#CA8A04', tone: 523.25, label: 'Yellow', keyBinding: '4' },
+    { id: 4, color: '#EA580C', tone: 349.23, label: 'Orange', keyBinding: '5' },
+    { id: 5, color: '#7C3AED', tone: 440.00, label: 'Purple', keyBinding: '6' },
+    { id: 6, color: '#0891B2', tone: 493.88, label: 'Cyan', keyBinding: '7' },
+    { id: 7, color: '#BE185D', tone: 587.33, label: 'Magenta', keyBinding: '8' },
+    { id: 8, color: '#4B5563', tone: 659.25, label: 'Gray', keyBinding: '9' },
+    { id: 9, color: '#92400E', tone: 698.46, label: 'Brown', keyBinding: '0' }
   ]
 };
 
 const SimonSaysGame = () => {
+  // Early return for SSR
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
   const searchParams = useSearchParams();
   const router = useRouter();
   
@@ -480,6 +486,24 @@ const SimonSaysGame = () => {
   );
 };
 
+// Create a dynamic component to prevent SSR issues
+const DynamicSimonSaysGame = dynamic(() => Promise.resolve(SimonSaysGame), {
+  ssr: false,
+  loading: () => (
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      minHeight: '100vh',
+      flexDirection: 'column',
+      gap: '1rem'
+    }}>
+      <h1 style={{ margin: 0, color: '#9333EA' }}>Simon Says</h1>
+      <p style={{ margin: 0, color: '#666' }}>Loading game...</p>
+    </div>
+  )
+});
+
 const SimonSaysGamePage = () => {
   return (
     <Suspense fallback={
@@ -495,7 +519,7 @@ const SimonSaysGamePage = () => {
         <p style={{ margin: 0, color: '#666' }}>Loading game...</p>
       </div>
     }>
-      <SimonSaysGame />
+      <DynamicSimonSaysGame />
     </Suspense>
   );
 };
