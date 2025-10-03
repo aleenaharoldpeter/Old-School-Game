@@ -6,6 +6,7 @@ import SudokuImage from '/public/SudokuLogo.webp'
 import SchulteImage from '/public/SchulteImage.webp'
 import MemoryFlip from '/public/MemoryFlip.png'
 import BulletMath from '/public/BulletMath.png'
+import SimonSaysImage from '/public/SimonSays.png'
 
 const SelectGame = () => {
   return (
@@ -46,7 +47,20 @@ const SelectGame = () => {
           backgroundColor={'#760172'}
           textColor={'white'}
         />
-        <Card image={BulletMath} name={'Bullet Math'} link={'bullet-math'} backgroundColor={'#F59E0B'} textColor={'white'} />      
+        <Card 
+          image={BulletMath} 
+          name={'Bullet Math'} 
+          link={'bullet-math'} 
+          backgroundColor={'#F59E0B'} 
+          textColor={'white'} 
+        />
+        <Card
+          image={SimonSaysImage}
+          name={'Simon Says'}
+          link={'simon-says'}
+          backgroundColor={'#9333EA'}
+          textColor={'white'}
+        />      
       </div>
     </>
   )
