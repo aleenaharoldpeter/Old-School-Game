@@ -86,23 +86,31 @@ const SimonSaysLanding = () => {
         <div className={styles.rulesGrid}>
           <div className={styles.ruleCard}>
             <div className={styles.ruleNumber}>1</div>
-            <h4>Watch</h4>
-            <p>Computer shows button sequence.</p>
+            <div className={styles.ruleText}>
+              <h4>Watch</h4>
+              <p>Computer shows button sequence.</p>
+            </div>
           </div>
           <div className={styles.ruleCard}>
             <div className={styles.ruleNumber}>2</div>
-            <h4>Repeat</h4>
-            <p>Click buttons in same order.</p>
+            <div className={styles.ruleText}>
+              <h4>Repeat</h4>
+              <p>Click buttons in same order.</p>
+            </div>
           </div>
           <div className={styles.ruleCard}>
             <div className={styles.ruleNumber}>3</div>
-            <h4>Level Up</h4>
-            <p>Sequence gets longer each round.</p>
+            <div className={styles.ruleText}>
+              <h4>Level Up</h4>
+              <p>Sequence gets longer each round.</p>
+            </div>
           </div>
           <div className={styles.ruleCard}>
             <div className={styles.ruleNumber}>4</div>
-            <h4>Game Modes</h4>
-            <p>Normal: retry on mistake. Strict: game over.</p>
+            <div className={styles.ruleText}>
+              <h4>Game Modes</h4>
+              <p>Normal: retry on mistake. Strict: game over.</p>
+            </div>
           </div>
         </div>
 
