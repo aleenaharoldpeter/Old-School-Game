@@ -83,7 +83,15 @@ const SimonSaysGame = () => {
   const [mounted, setMounted] = useState(false);
   
   const audioContextRef = useRef<AudioContext | null>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Track ALL scheduled timeouts so we can clear them on unmount / restart
+  const timeoutsRef = useRef<Array<ReturnType<typeof setTimeout>>>([]);
+
+  const clearScheduledTimeouts = useCallback(() => {
+    if (timeoutsRef.current.length) {
+      timeoutsRef.current.forEach(id => clearTimeout(id));
+      timeoutsRef.current = [];
+    }
+  }, []);
 
   const buttons = BUTTON_CONFIGS[buttonCount];
 
@@ -182,6 +190,7 @@ const SimonSaysGame = () => {
 
   // Start new game
   const startNewGame = useCallback(() => {
+    clearScheduledTimeouts();
     const firstStep = generateNextStep();
     setGameState({
       sequence: [firstStep],
@@ -193,33 +202,38 @@ const SimonSaysGame = () => {
       score: 0
     });
     initAudioContext();
-  }, [generateNextStep, initAudioContext]);
+  }, [generateNextStep, initAudioContext, clearScheduledTimeouts]);
 
   // Show sequence to player
   const showSequence = useCallback(async () => {
     if (gameState.gameStatus !== 'showing') return;
 
+    // Clear any previously scheduled flashes before starting a new batch
+    clearScheduledTimeouts();
     setActiveButton(null);
     
     for (let i = 0; i < gameState.sequence.length; i++) {
-      await new Promise(resolve => {
-        timeoutRef.current = setTimeout(() => {
+      // Wrap each step in a promise so we can await sequentially
+      await new Promise<void>(resolve => {
+        const delay = i * 500 + 800;
+        const highlightTimeout = setTimeout(() => {
           const buttonId = gameState.sequence[i];
           const button = buttons[buttonId];
-          
+
           setActiveButton(buttonId);
           playTone(button.tone, 400);
-          
-          setTimeout(() => {
+
+          const resetTimeout = setTimeout(() => {
             setActiveButton(null);
-            resolve(void 0);
+            resolve();
           }, 400);
-        }, i * 500 + 800);
+          timeoutsRef.current.push(resetTimeout);
+        }, delay);
+        timeoutsRef.current.push(highlightTimeout);
       });
     }
 
-    // Start player turn
-    setTimeout(() => {
+    const playerTurnTimeout = setTimeout(() => {
       setGameState((prev: GameState) => ({
         ...prev,
         isShowingSequence: false,
@@ -228,7 +242,8 @@ const SimonSaysGame = () => {
         playerSequence: []
       }));
     }, 500);
-  }, [gameState.sequence, gameState.gameStatus, buttons, playTone]);
+    timeoutsRef.current.push(playerTurnTimeout);
+  }, [gameState.sequence, gameState.gameStatus, buttons, playTone, clearScheduledTimeouts]);
 
   // Handle player button click
   const handleButtonClick = useCallback((buttonId: number) => {
@@ -270,7 +285,7 @@ const SimonSaysGame = () => {
     if (newPlayerSequence.length === gameState.sequence.length) {
       // Round completed successfully
       const newRound = gameState.currentRound + 1;
-      const newScore = gameState.currentRound;
+      const newScore = gameState.currentRound; // Score equals rounds completed
       const nextStep = generateNextStep();
 
       setGameState((prev: GameState) => ({
@@ -283,6 +298,8 @@ const SimonSaysGame = () => {
         isPlayerTurn: false,
         gameStatus: 'showing'
       }));
+      // Persist potential new best score immediately
+      saveBestScore(newScore);
     } else {
       // Continue with current sequence
       setGameState((prev: GameState) => ({
@@ -346,14 +363,12 @@ const SimonSaysGame = () => {
     }
   }, [gameState.gameStatus, showSequence]);
 
-  // Cleanup timeouts
+  // Cleanup all scheduled timeouts on unmount
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      clearScheduledTimeouts();
     };
-  }, []);
+  }, [clearScheduledTimeouts]);
 
   const getStatusMessage = () => {
     switch (gameState.gameStatus) {
