@@ -57,10 +57,6 @@ const BUTTON_CONFIGS: Record<ButtonCount, Button[]> = {
 };
 
 const SimonSaysGame = () => {
-  // Early return for SSR
-  if (typeof window === 'undefined') {
-    return null;
-  }
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -252,7 +248,10 @@ const SimonSaysGame = () => {
     const button = buttons[buttonId];
     playTone(button.tone, 300);
     setActiveButton(buttonId);
-    setTimeout(() => setActiveButton(null), 300);
+    const releaseTimeout = setTimeout(() => {
+      setActiveButton(null);
+    }, 300);
+    timeoutsRef.current.push(releaseTimeout);
 
     const newPlayerSequence = [...gameState.playerSequence, buttonId];
     const currentIndex = gameState.playerSequence.length;
